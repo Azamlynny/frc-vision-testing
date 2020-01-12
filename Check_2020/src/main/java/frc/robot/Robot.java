@@ -63,7 +63,9 @@ public class Robot extends TimedRobot {
     vis.ANGLE_CORRECT_MIN_ANGLE = 0.05f;
     // Distance
     vis.DISTANCE_ESTIMATION_METHOD = "trig";
-    vis.TARGETS.add(new Target(98.25, 72));
+    vis.TARGETS.add(new Target(48, 48));
+    SmartDashboard.putNumber("P", -0.1F);
+    SmartDashboard.putNumber("F", 0.2);
   }
 
   @Override
@@ -94,6 +96,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+    vis.ANGLE_CORRECT_P = SmartDashboard.getNumber("P", -0.1F);
+    vis.ANGLE_CORRECT_F = SmartDashboard.getNumber("F", 0.2F);
     vis.networkTableFunctionality(NetworkTableInstance.getDefault().getTable("limelight"));
     // Basic Teleop Drive Code
     driveSpeed = 0;
@@ -121,7 +125,11 @@ public class Robot extends TimedRobot {
         // driveSpeed += vis.getInDistance(vis.TARGETS.get(0));
       }
 
-      DriveTrain.arcadeDrive(driveSpeed, turnSpeed);
+     DriveTrain.arcadeDrive(driveSpeed, turnSpeed);
+     SmartDashboard.putNumber("driveSpeed", driveSpeed);
+     SmartDashboard.putNumber("turnSpeed", turnSpeed);
+     SmartDashboard.putNumber("dist", vis.trigDistance(vis.TARGETS.get(0)));
+    //  System.out.println(turnSpeed);
   }
 
   @Override
