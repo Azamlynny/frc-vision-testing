@@ -64,8 +64,8 @@ public class Robot extends TimedRobot {
     // Distance
     vis.DISTANCE_ESTIMATION_METHOD = "trig";
     vis.TARGETS.add(new Target(48, 48));
-    SmartDashboard.putNumber("P", -0.1F);
-    SmartDashboard.putNumber("F", 0.2);
+    SmartDashboard.putNumber("P", -0.0215F);
+    SmartDashboard.putNumber("F", 0.215);
   }
 
   @Override
@@ -96,8 +96,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    vis.ANGLE_CORRECT_P = SmartDashboard.getNumber("P", -0.1F);
-    vis.ANGLE_CORRECT_F = SmartDashboard.getNumber("F", 0.2F);
+    vis.ANGLE_CORRECT_P = SmartDashboard.getNumber("P", -0.0215F);
+    vis.ANGLE_CORRECT_F = SmartDashboard.getNumber("F", 0.215F);
     vis.networkTableFunctionality(NetworkTableInstance.getDefault().getTable("limelight"));
     // Basic Teleop Drive Code
     driveSpeed = 0;
@@ -114,16 +114,13 @@ public class Robot extends TimedRobot {
           driveSpeed += -y;
           turnSpeed += x;
       } 
-      else if(Controller.getBumper(GenericHID.Hand.kRight)) {
-          double x = Controller.getX(GenericHID.Hand.kLeft);
-          double y = Controller.getY(GenericHID.Hand.kRight);
-          driveSpeed += -y;
-          turnSpeed += x;
+      if(Controller.getBumper(GenericHID.Hand.kRight)) {
+          turnSpeed += vis.angleCorrect();
       }
-      if(Controller.getBButton()){
-        turnSpeed += vis.angleCorrect();
-        // driveSpeed += vis.getInDistance(vis.TARGETS.get(0));
-      }
+      // if(Controller.getBButton()){
+      //   turnSpeed += vis.angleCorrect();
+      //   // driveSpeed += vis.getInDistance(vis.TARGETS.get(0));
+      // }
 
      DriveTrain.arcadeDrive(driveSpeed, turnSpeed);
      SmartDashboard.putNumber("driveSpeed", driveSpeed);
